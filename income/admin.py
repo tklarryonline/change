@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from income.models.records import IncomeRecord
+from income.models.predict import IncomePredict
 
 
 class IncomeRecordAdmin(admin.ModelAdmin):

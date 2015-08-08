@@ -33,7 +33,7 @@ class ViewIncomeChartTestCase(BaseLiveTestCase):
         chart.size['height'].shouldnt.equal(0)
 
     def test_chart_update(self):
-        cols = lambda: len(self.find_all(".highcharts-axis-labels.highcharts-xaxis-labels text"))
+        cols = lambda: len(self.find_all("#income-chart .highcharts-axis-labels.highcharts-xaxis-labels text"))
         current_cols = cols()
 
         IncomeRecordFactory(user=self.user, timestamp=timezone.now())

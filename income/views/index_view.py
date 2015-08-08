@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
+from income.models.predict import IncomePredict
 
 from income.models.records import IncomeRecord
 
@@ -40,8 +41,6 @@ class IndexView(ListView):
                                for x in range(incomes_length - 1)]
         context['income_with_changes'] = income_with_changes
 
-        income_changes_percent = [(income_changes[x] / incomes[x].number) * 100
-                                  for x in range(len(income_changes))]
-        context['income_changes_percent'] = income_changes_percent
+        context['income_predict'] = IncomePredict.objects.get(user=self.request.user)
 
         return context

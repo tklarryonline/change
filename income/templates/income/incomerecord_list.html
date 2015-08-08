@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
-{% load jsonify %}
+{% load humanize %}
 
 {% block content %}
   <div class="row">
+    <div class="col-md-12 text-right">
+      Next year income per month <strong>{{ income_predict.number|floatformat:0|intcomma }} VND</strong>.
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-12">
       <div id="income-chart"></div>
-      <div id="income_with_changes"></div>
-      <div id="income-change-chart"></div>
-      <div id="income-change-percent-chart"></div>
     </div>
   </div>
 {% endblock %}
@@ -19,9 +21,6 @@
   var categories = [];
   var data = [];
   var predict_data = [];
-  var change_data = {{ income_changes|jsonify }};
-  var income_changes_percent = {{ income_changes_percent|jsonify }};
-  var income_with_changes = {{ income_with_changes|jsonify }};
 
   {% for income in object_list %}
     categories.push('{{ income.timestamp|date:"SHORT_DATE_FORMAT" }}');
@@ -61,80 +60,10 @@
           name: 'Income',
           data: data
       }, {
-          name: 'Income with change',
-          data: income_with_changes
-      }, {
           name: 'Predict',
           data: predict_data
       }
       ]
-  });
-
-  $('#income-change-chart').highcharts({
-      title: {
-          text: 'Your income change chart'
-      },
-      xAxis: {
-          categories: categories,
-          crosshair: true
-      },
-      yAxis: {
-          title: {
-              text: 'Income'
-          }
-      },
-      tooltip: {
-          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:,f} VND</b></td></tr>',
-          footerFormat: '</table>',
-          shared: true,
-          useHTML: true
-      },
-      plotOptions: {
-          column: {
-              pointPadding: 0.2,
-              borderWidth: 0
-          }
-      },
-      series: [{
-          name: 'Time',
-          data: change_data
-
-      }]
-  });
-
-  $('#income-change-percent-chart').highcharts({
-      title: {
-          text: 'Your income percent change chart'
-      },
-      xAxis: {
-          categories: categories,
-          crosshair: true
-      },
-      yAxis: {
-          title: {
-              text: 'Income'
-          }
-      },
-      tooltip: {
-          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
-          footerFormat: '</table>',
-          shared: true,
-          useHTML: true
-      },
-      plotOptions: {
-          column: {
-              pointPadding: 0.2,
-              borderWidth: 0
-          }
-      },
-      series: [{
-          name: 'Time',
-          data: income_changes_percent
-      }]
   });
   </script>
 {% endblock %}

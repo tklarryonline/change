@@ -1,5 +1,6 @@
 from django.db import models
 from django_pandas.managers import DataFrameManager
+
 from common.models import User
 
 

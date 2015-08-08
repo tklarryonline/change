@@ -14,4 +14,4 @@ class IncomeRecordFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     timestamp = factory.Sequence(lambda n: fake.date_time())
-    number = factory.Sequence(lambda n: n)
+    number = factory.Sequence(lambda n: n + 1)
