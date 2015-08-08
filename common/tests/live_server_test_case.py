@@ -6,7 +6,7 @@ from django.test.testcases import LiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.webdriver import WebDriver
 import time
-from common.tests import TimeoutException
+from common.tests.exceptions import TimeoutException
 
 from common.tests.user_test_mixin import UserTestBaseMixin
 
