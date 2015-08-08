@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div id="income-chart"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer-js %}
+  {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/4.1.7/highcharts.js"></script>
+  <script>
+  categories = [];
+  data = [];
+  {% for income in object_list %}
+    categories.push('{{ income.timestamp|date:"SHORT_DATE_FORMAT" }}');
+    data.push({{ income.number }});
+  {% endfor %}
+  $('#income-chart').highcharts({
+      title: {
+          text: 'Your income chart'
+      },
+      xAxis: {
+          categories: categories,
+          crosshair: true
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: 'Income'
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: [{
+          name: 'Time',
+          data: data
+
+      }]
+  });
+  </script>
+{% endblock %}

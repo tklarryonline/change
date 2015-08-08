@@ -14,7 +14,7 @@ def is_url_can_not_go_back(request, url):
 
 
 def get_go_back_url(request, redirect_fieldname=REDIRECT_FIELD_NAME, default='/'):
-    redirect_to = request.REQUEST.get(redirect_fieldname)
+    redirect_to = request.GET.get(redirect_fieldname) or request.POST.get(redirect_fieldname)
     if is_url_can_not_go_back(request, redirect_to):
         redirect_to = request.META.get('HTTP_REFERER')
         if is_url_can_not_go_back(request, redirect_to):
