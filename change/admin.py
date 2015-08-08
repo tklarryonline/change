@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from change.models.records import Record
+from change.models.records import IncomeRecord
 
-admin.site.register(model_or_iterable=Record)
+admin.site.register(IncomeRecord)
