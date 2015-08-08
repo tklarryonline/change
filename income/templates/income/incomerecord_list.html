@@ -18,6 +18,7 @@
   <script>
   var categories = [];
   var data = [];
+  var predict_data = [];
   var change_data = {{ income_changes|jsonify }};
   var income_changes_percent = {{ income_changes_percent|jsonify }};
   var income_with_changes = {{ income_with_changes|jsonify }};
@@ -25,8 +26,7 @@
   {% for income in object_list %}
     categories.push('{{ income.timestamp|date:"SHORT_DATE_FORMAT" }}');
     data.push({{ income.number }});
-    {% if object_list|length < forloop.counter0 %}
-    {% endif %}
+    predict_data.push({{ income.predict_number }});
   {% endfor %}
 
   $('#income-chart').highcharts({
@@ -63,7 +63,11 @@
       }, {
           name: 'Income with change',
           data: income_with_changes
-      }]
+      }, {
+          name: 'Predict',
+          data: predict_data
+      }
+      ]
   });
 
   $('#income-change-chart').highcharts({
