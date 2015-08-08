@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block content %}
+  <div class="row">
+    <div class="col-md-12 text-right">
+      Next year income per month <strong>{{ income_predict.number|floatformat:0|intcomma }} VND</strong>.
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-12">
       <div id="income-chart"></div>
@@ -12,12 +18,16 @@
   {{ block.super }}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/4.1.7/highcharts.js"></script>
   <script>
-  categories = [];
-  data = [];
+  var categories = [];
+  var data = [];
+  var predict_data = [];
+
   {% for income in object_list %}
     categories.push('{{ income.timestamp|date:"SHORT_DATE_FORMAT" }}');
     data.push({{ income.number }});
+    predict_data.push({{ income.predict_number }});
   {% endfor %}
+
   $('#income-chart').highcharts({
       title: {
           text: 'Your income chart'
@@ -35,7 +45,7 @@
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+              '<td style="padding:0"><b>{point.y:,f} VND</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true
@@ -47,10 +57,13 @@
           }
       },
       series: [{
-          name: 'Time',
+          name: 'Income',
           data: data
-
-      }]
+      }, {
+          name: 'Predict',
+          data: predict_data
+      }
+      ]
   });
   </script>
 {% endblock %}
