@@ -4,7 +4,7 @@ from django.template.defaultfilters import date
 from django.utils import timezone
 
 from common.tests.live_server_test_case import BaseLiveTestCase
-from income.factories import IncomeRecordFactory
+from income.factories import IncomeRecordFactory, IncomePredictFactory
 
 
 class ViewIncomeChartTestCase(BaseLiveTestCase):
@@ -20,6 +20,8 @@ class ViewIncomeChartTestCase(BaseLiveTestCase):
         self.incomes = incomes
 
         self.login_user()
+
+        self.income_predict = IncomePredictFactory(user=self.user)
 
         self.visit(reverse('income:index'))
 
@@ -41,3 +43,9 @@ class ViewIncomeChartTestCase(BaseLiveTestCase):
         self.visit(reverse('income:index'))
 
         cols().should.equal(current_cols + 1)
+
+    def test_user_see_prediction(self):
+        self.find("#income-prediction").should.be.ok
+        self.should_see_text('Next year income per month {predict:,.0f} VND.'.format(
+            predict=self.income_predict.number
+        ))
