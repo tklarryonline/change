@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, uid, **options):
         if not uid:
-            print("User id is required")
+            print('User id is required')
             return
 
         user = User.objects.get(pk=uid)
