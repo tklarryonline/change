@@ -44,7 +44,7 @@ INSTALLED_APPS = (
 
     'accounts',
     'common',
-    'change',
+    'income',
 )
 
 MIDDLEWARE_CLASSES = (
