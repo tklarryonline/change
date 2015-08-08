@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 
     'django_extensions',
     'social.apps.django_app.default',
+    'jsonify',
 
     'accounts',
     'common',
