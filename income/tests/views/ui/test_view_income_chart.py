@@ -8,7 +8,7 @@ from income.factories import IncomeRecordFactory
 
 
 class ViewIncomeChartTestCase(BaseLiveTestCase):
-    def test_user_see_chart(self):
+    def setUp(self):
         self.init_user()
 
         incomes = []
@@ -17,15 +17,28 @@ class ViewIncomeChartTestCase(BaseLiveTestCase):
             timestamp = timezone.make_aware(timestamp)
             income = IncomeRecordFactory(user=self.user, timestamp=timestamp)
             incomes.append(income)
+        self.incomes = incomes
 
         self.login_user()
 
         self.visit(reverse('income:index'))
 
+    def test_user_see_chart(self):
+
         self.find("#income-chart").should.be.ok
 
-        for income in incomes:
+        for income in self.incomes:
             self.should_see_text(date(income.timestamp, settings.SHORT_DATE_FORMAT))
 
         chart = self.find("#income-chart")
         chart.size['height'].shouldnt.equal(0)
+
+    def test_chart_update(self):
+        cols = lambda: len(self.find_all(".highcharts-axis-labels.highcharts-xaxis-labels text"))
+        current_cols = cols()
+
+        IncomeRecordFactory(user=self.user, timestamp=timezone.now())
+
+        self.visit(reverse('income:index'))
+
+        cols().should.equal(current_cols + 1)
