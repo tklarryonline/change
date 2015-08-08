@@ -41,6 +41,6 @@ class IndexView(ListView):
                                for x in range(incomes_length - 1)]
         context['income_with_changes'] = income_with_changes
 
-        context['income_predict'] = IncomePredict.objects.get(user=self.request.user)
+        context['income_predict'], _ = IncomePredict.objects.get_or_create(user=self.request.user)
 
         return context
