@@ -1,4 +1,6 @@
+from dateutil.relativedelta import relativedelta
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 import numpy as np
 import pandas as pd
 
@@ -39,9 +41,9 @@ class Command(BaseCommand):
             income_record.predict_number = row['predict_number']
             income_record.save()
 
-        next_year_int = 86.4 * 365
-        now = pd.Timestamp.now().value / 1e12
-        next_year = now + next_year_int
+        # Calculates next year value
+        next_year = pd.Timestamp(timezone.now() + relativedelta(years=1))
+        next_year = next_year.value / 1e12
 
         income_predict, created = IncomePredict.objects.get_or_create(user=user)
 
