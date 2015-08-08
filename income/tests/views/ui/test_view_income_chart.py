@@ -24,7 +24,6 @@ class ViewIncomeChartTestCase(BaseLiveTestCase):
         self.visit(reverse('income:index'))
 
     def test_user_see_chart(self):
-
         self.find("#income-chart").should.be.ok
 
         for income in self.incomes:
