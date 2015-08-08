@@ -18,6 +18,18 @@
       <a class="btn btn-primary" href="{% url 'income:add' %}">Add income</a>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      {% if user.incometarget.number %}
+        <a href="{% url 'income:target' %}">
+          Target {{ user.incometarget.number|floatformat:0|intcomma }}
+          on {{ user.incometarget.month }}/{{ user.incometarget.year }}.
+        </a>
+      {% else %}
+        <a href="{% url 'income:target' %}">You haven't set target yet.</a>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block footer-js %}
