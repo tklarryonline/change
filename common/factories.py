@@ -18,7 +18,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     is_superuser = True
     is_staff = True
     is_active = True
-    coins = fake.random_int(min=90)
 
     @classmethod
     def _prepare(cls, create, **kwargs):

@@ -1,15 +1,15 @@
 import os
 import threading
-from django.core import management
+import time
 
+from django.core import management
+from django.core.urlresolvers import reverse
 from django.test.testcases import LiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.webdriver import WebDriver
-import time
+
 from common.tests.exceptions import TimeoutException
-
 from common.tests.user_test_mixin import UserTestBaseMixin
-
 
 world = threading.local()
 world.browser = None
@@ -54,11 +54,10 @@ class BaseLiveTestCase(LiveServerTestCase, UserTestBaseMixin):
         self.assertNotIn(text, self.find('body').text)
 
     def login(self, user):
-        self.visit('/')
-        self.find("a#login-nav").click()
-        self.find("#id_auth-username").send_keys(user.username)
-        self.find("#id_auth-password").send_keys(user.raw_password)
-        self.button("Next").click()
+        self.visit(reverse('accounts:login'))
+        self.find("#id_username").send_keys(user.username)
+        self.find("#id_password").send_keys(user.raw_password)
+        self.button("Log in").click()
 
     def element_exist(self, css_selector):
         try:
