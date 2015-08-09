@@ -17,6 +17,17 @@ class Command(BaseCommand):
         parser.add_argument('--uid',
                             help='User ID')
 
+    @staticmethod
+    def get_polyfit(income_records):
+        # Calculates polyfit
+        x = income_records['timestamp_float']
+        y = income_records['number']
+        fit = np.polyfit(x, y, 2)
+        return np.poly1d(fit)
+
+    def timestamp_to_int(self, timestamp):
+        return timestamp.value / 1e12
+
     def handle(self, uid, **options):
         if not uid:
             print('User id is required')
@@ -31,9 +42,7 @@ class Command(BaseCommand):
 
         # Calculates polyfit
         x = income_records['timestamp_float']
-        y = income_records['number']
-        fit = np.polyfit(x, y, 2)
-        polyfit = np.poly1d(fit)
+        polyfit = self.get_polyfit(income_records)
 
         income_records['predict_number'] = polyfit(x)
 
@@ -44,9 +53,20 @@ class Command(BaseCommand):
 
         # Calculates next year value
         next_year = pd.Timestamp(timezone.now() + relativedelta(years=1))
-        next_year = next_year.value / 1e12
+        next_year = self.timestamp_to_int(next_year)
 
         income_predict, created = IncomePredict.objects.get_or_create(user=user)
 
         income_predict.number = polyfit(next_year)
         income_predict.save()
+
+        # calculate with target
+        income_target = user.incometarget
+        timestamp = pd.Timestamp(timezone.datetime(year=income_target.year, month=income_target.month, day=1))
+        income_records = income_records.append([{
+            'timestamp_float': self.timestamp_to_int(timestamp),
+            'number': income_target.number,
+        }])
+        new_polyfit = self.get_polyfit(income_records)
+        income_target.coeffs = new_polyfit.coeffs.tolist()
+        income_target.save()
