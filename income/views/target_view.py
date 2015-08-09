@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.core.management import call_command
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import UpdateView
-from income.forms import IncomeTargetForm
+
 from income.models.target import IncomeTarget
 
 
@@ -18,3 +19,9 @@ class TargetView(UpdateView):
     def get_object(self, queryset=None):
         target, _ = IncomeTarget.objects.get_or_create(user=self.request.user)
         return target
+
+    def form_valid(self, form):
+        result = super(TargetView, self).form_valid(form)
+        call_command('calculate_income_prediction', uid=self.request.user.id)
+        return result
+
