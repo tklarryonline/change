@@ -25,6 +25,9 @@
           Target {{ user.incometarget.number|floatformat:0|intcomma }}
           on {{ user.incometarget.month }}/{{ user.incometarget.year }}.
         </a>
+        <br />
+        Your next three month income should reach
+        <strong>{{ user.incometarget.next_three_month_target|floatformat:0|intcomma }} VND</strong>.
       {% else %}
         <a href="{% url 'income:target' %}">You haven't set target yet.</a>
       {% endif %}
