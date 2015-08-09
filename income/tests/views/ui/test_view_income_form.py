@@ -18,11 +18,11 @@ class TestViewIncomeForm(BaseLiveTestCase):
         self.find('#income-form').should.be.ok
         self.find('#income-form #id_number').should.be.ok
         self.find('#income-form #id_timestamp').should.be.ok
-        self.should_see_text('Add income record')
+        self.should_see_text('Save income')
 
     def test_add_income_page(self):
         num_records = IncomeRecord.objects.count()
         self.fill_in(selector='#id_number', value='10000')
         self.fill_in(selector='#id_timestamp', value='2015-06-28')
-        self.button('Add income record').click()
+        self.button('Save income').click()
         IncomeRecord.objects.count().should.equal(num_records + 1)
