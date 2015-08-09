@@ -22,6 +22,7 @@ class IncomeRecordFactory(factory.django.DjangoModelFactory):
 class IncomePredictFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = IncomePredict
+        django_get_or_create = ('user', )
 
     user = factory.SubFactory(UserFactory)
     number = factory.Sequence(lambda n: n ** 2)
