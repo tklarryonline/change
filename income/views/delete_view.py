@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.http.response import Http404
 from django.views.generic.edit import DeleteView as BaseDeleteView
+
 from income.models.records import IncomeRecord
 
 
