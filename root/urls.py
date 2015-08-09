@@ -18,8 +18,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from common.views import HomepageView
 
 urlpatterns = [
+    url(r'^$', HomepageView.as_view(), name='homepage'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^income/', include('income.urls', namespace='income')),
