@@ -3,7 +3,7 @@ from django.test.testcases import TestCase
 from django.utils import timezone
 
 from common.factories import UserFactory
-from income.factories import IncomeRecordFactory
+from income.factories import IncomeRecordFactory, IncomeTargetFactory
 from income.models.predict import IncomePredict
 
 
@@ -18,6 +18,8 @@ class TestCalculateIncomePredictionCommand(TestCase):
             timestamp = timezone.make_aware(timestamp)
             income = IncomeRecordFactory(user=self.user, timestamp=timestamp)
             incomes.append(income)
+
+        IncomeTargetFactory(user=self.user)
 
     def test_call_command_success(self):
         predict_num = IncomePredict.objects.count()
