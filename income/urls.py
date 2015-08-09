@@ -6,6 +6,7 @@ from income.views.delete_view import DeleteView
 from income.views.edit_view import EditView
 from income.views.index_view import IndexView
 from income.views.target_view import TargetView
+from income.views.update_prediction_view import UpdatePredictionView
 
 
 urlpatterns = [
@@ -18,4 +19,9 @@ urlpatterns = [
         view=login_required(AddIncomeView.as_view()),
         name='add'
     ),
+    url(
+        regex=r'^command/calculate_income_prediction/(?P<pk>\d*)/',
+        view=UpdatePredictionView.as_view(),
+        name='cmd_calculate_income_prediction'
+    )
 ]
